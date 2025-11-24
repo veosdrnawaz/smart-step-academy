@@ -10,12 +10,15 @@ import Testimonials from './components/Testimonials';
 import Admissions from './components/Admissions';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
+import BackgroundAnimation from './components/BackgroundAnimation';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-dark text-white font-sans overflow-x-hidden selection:bg-primary selection:text-dark">
+    <div className="min-h-screen bg-dark text-white font-sans overflow-x-hidden selection:bg-primary selection:text-dark relative">
+      <BackgroundAnimation />
       <Navbar />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <About />
         <Courses />
@@ -27,6 +30,7 @@ const App: React.FC = () => {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 };

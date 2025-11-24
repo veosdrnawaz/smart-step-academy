@@ -1,8 +1,11 @@
 import React from 'react';
-import { GraduationCap, Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Twitter } from 'lucide-react';
 import { Link } from 'react-scroll';
 
 const Footer: React.FC = () => {
+  // Same logo logic as Navbar
+  const LOGO_URL = "https://placehold.co/100x100/00bfa6/ffffff?text=S";
+
   const navItems = [
     { name: 'Home', to: 'home' },
     { name: 'About', to: 'about' },
@@ -12,13 +15,17 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-card border-t border-white/5 pt-16 pb-8">
+    <footer className="bg-card border-t border-white/5 pt-16 pb-8 relative z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center mb-4">
-              <div className="bg-primary/20 p-2 rounded-lg mr-2">
-                <GraduationCap className="h-6 w-6 text-primary" />
+              <div className="bg-primary/20 p-1 rounded-lg mr-3">
+                 <img 
+                   src={LOGO_URL} 
+                   alt="Smart Step Academy Logo" 
+                   className="h-8 w-8 object-cover rounded" 
+                 />
               </div>
               <span className="font-bold text-xl text-white">
                 Smart Step

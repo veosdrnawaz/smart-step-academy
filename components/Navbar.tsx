@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, GraduationCap } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Link } from 'react-scroll';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  // INSTRUCTION: Replace the URL below with the link to your actual logo image.
+  // You can upload your image to a folder in your project (e.g., /public/logo.png) or use an external URL.
+  const LOGO_URL = "https://placehold.co/100x100/00bfa6/ffffff?text=S";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,8 +31,13 @@ const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="bg-gradient-to-br from-primary to-secondary p-2 rounded-lg mr-2">
-              <GraduationCap className="h-6 w-6 text-dark" />
+            {/* Logo Image */}
+            <div className="bg-gradient-to-br from-primary to-secondary p-1 rounded-lg mr-3">
+               <img 
+                 src={LOGO_URL} 
+                 alt="Smart Step Academy Logo" 
+                 className="h-8 w-8 object-cover rounded" 
+               />
             </div>
             <span className="font-bold text-xl tracking-tight text-white">
               Smart Step <span className="text-primary">Academy</span>
