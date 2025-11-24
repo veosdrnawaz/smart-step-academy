@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { GOOGLE_SCRIPT_URL } from '../config';
+import { https://script.google.com/macros/s/AKfycby45RBg-tlFMNqRFIiIFjsqEkmqjA57CbfaI__TKbtMYK-InSvzAJx5K36qgUj0txOmUQ/exec } from '../config';
 
 const Contact: React.FC = () => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -21,7 +21,7 @@ const Contact: React.FC = () => {
 
     try {
       // Using 'text/plain' Content-Type avoids CORS preflight checks for simple POST
-      await fetch(GOOGLE_SCRIPT_URL, {
+      await fetch(https://script.google.com/macros/s/AKfycby45RBg-tlFMNqRFIiIFjsqEkmqjA57CbfaI__TKbtMYK-InSvzAJx5K36qgUj0txOmUQ/exec, {
         method: 'POST',
         body: JSON.stringify({ ...formData, action: 'submit', source: 'Contact Form' }),
       });
