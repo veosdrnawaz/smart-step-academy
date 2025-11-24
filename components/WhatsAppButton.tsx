@@ -1,14 +1,35 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const WhatsAppButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
   const phoneNumber = "923261658636";
-  const whatsappUrl = `https://wa.me/${phoneNumber}`;
+  // Pre-filled message to identify that the user came from the website
+  const message = "Asalam-o-Alaikum! I am visiting your website and would like to know more about Smart Step Academy.";
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+  // Handle click outside to close the chat box
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+    <div ref={containerRef} className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
         <AnimatePresence>
             {isOpen && (
                 <motion.div
