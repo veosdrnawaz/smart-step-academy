@@ -7,14 +7,17 @@
  * INSTRUCTIONS:
  * 1. Paste this code into your Google Apps Script editor.
  * 2. Save (Ctrl+S).
- * 3. Click "Smart Step Admin" > "Setup Sheet" in the toolbar (refresh sheet if menu missing).
- * 4. Deploy > New Deployment > Web App > Access: "Anyone" > Deploy.
- * 5. Copy the URL and paste it into your website code (src/config.ts).
+ * 3. Click "Deploy" > "New Deployment" > Select "Web App".
+ * 4. Configuration:
+ *    - Description: "V2 with Validation"
+ *    - Execute as: "Me"
+ *    - Who has access: "Anyone"
+ * 5. Click "Deploy".
  */
 
 // --- CONFIGURATION ---
 var SHEET_NAME = "Sheet1";
-var ADMIN_PASSWORD = "Nida123"; // Updated Password
+var ADMIN_PASSWORD = "Nida123"; 
 
 // --- SETUP FUNCTION ---
 function onOpen() {
@@ -50,24 +53,37 @@ function doPost(e) {
     
     // Parse Data
     var rawData = e.postData.contents;
-    var data = JSON.parse(rawData);
-    var action = data.action || "submit"; // 'submit', 'login', 'get_leads'
-    
+    var data;
+    try {
+      data = JSON.parse(rawData);
+    } catch(err) {
+      data = {};
+    }
+
+    var action = data.action || "submit"; 
     var response = {};
     
     // --- ACTION: SUBMIT FORM ---
     if (action === "submit") {
-      var timestamp = new Date();
-      sheet.appendRow([
-        timestamp,
-        data.name || "",
-        data.grade || "",
-        data.phone || "",
-        data.message || "",
-        data.source || "Website",
-        "New"
-      ]);
-      response = { status: "success", message: "Data saved" };
+      // VALIDATION: Prevent empty entries
+      var name = data.name ? data.name.toString().trim() : "";
+      var phone = data.phone ? data.phone.toString().trim() : "";
+
+      if (name === "" || phone === "") {
+         response = { status: "error", message: "Name and Phone are required." };
+      } else {
+        var timestamp = new Date();
+        sheet.appendRow([
+          timestamp,
+          name,
+          data.grade || "",
+          phone,
+          data.message || "",
+          data.source || "Website",
+          "New"
+        ]);
+        response = { status: "success", message: "Data saved" };
+      }
     }
     
     // --- ACTION: ADMIN LOGIN ---
@@ -84,8 +100,12 @@ function doPost(e) {
       if (data.password === ADMIN_PASSWORD) {
         var rows = sheet.getDataRange().getValues();
         var headers = rows.shift(); // Remove headers
+        
         // Convert to array of objects
         var leads = rows.map(function(row) {
+          // Check if row is empty
+          if(!row[0] && !row[1]) return null;
+
           return {
             timestamp: row[0],
             name: row[1],
@@ -95,7 +115,9 @@ function doPost(e) {
             source: row[5],
             status: row[6]
           };
-        }).reverse(); // Show newest first
+        })
+        .filter(function(item) { return item !== null; }) // Remove nulls
+        .reverse(); // Show newest first
         
         response = { status: "success", data: leads };
       } else {

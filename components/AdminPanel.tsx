@@ -37,7 +37,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
       
       if (result.status === 'success') {
         setIsAuthenticated(true);
-        setLeads(result.data);
+        // Basic client-side filtering to remove any remaining "bad" data from view
+        const cleanLeads = result.data.filter((l: Lead) => l.name && l.name !== 'N/A' && l.name.trim() !== '');
+        setLeads(cleanLeads);
         setStatus('idle');
       } else {
         alert('Invalid Password');
@@ -59,10 +61,33 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
       });
       const result = await response.json();
       if (result.status === 'success') {
-        setLeads(result.data);
+        const cleanLeads = result.data.filter((l: Lead) => l.name && l.name !== 'N/A' && l.name.trim() !== '');
+        setLeads(cleanLeads);
       }
     } catch(e) { console.error(e); }
     setStatus('idle');
+  };
+
+  // Helper to generate WhatsApp Link
+  const getWhatsAppLink = (lead: Lead) => {
+    if (!lead.phone) return '#';
+    
+    // 1. Clean number (remove non-digits)
+    let cleanNumber = lead.phone.replace(/\D/g, '');
+    
+    // 2. Format for Pakistan (03... -> 923...)
+    if (cleanNumber.startsWith('0')) {
+        cleanNumber = '92' + cleanNumber.substring(1);
+    } else if (!cleanNumber.startsWith('92')) {
+        // Fallback if they just typed 3001234567
+        cleanNumber = '92' + cleanNumber;
+    }
+
+    // 3. Create Message
+    const text = `Asalam-o-Alaikum ${lead.name}, I received your inquiry at Smart Step Academy for Grade: ${lead.grade}. You provided the details: Name: ${lead.name}, Phone: ${lead.phone}. How can we assist you further?`;
+    
+    // 4. Return URL
+    return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(text)}`;
   };
 
   if (!isOpen) return null;
@@ -75,7 +100,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-dark border border-white/10 w-full max-w-4xl h-[80vh] rounded-2xl shadow-2xl overflow-hidden relative z-[101] flex flex-col"
+          className="bg-dark border border-white/10 w-full max-w-6xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden relative z-[101] flex flex-col"
         >
           {/* Header */}
           <div className="p-4 border-b border-white/10 flex justify-between items-center bg-card">
@@ -119,7 +144,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-white font-bold">Recent Leads ({leads.length})</h3>
                   <button onClick={refreshData} className="text-primary hover:text-white text-sm">
-                    <i className={`fa-solid fa-rotate-right ${status === 'loading' ? 'fa-spin' : ''} mr-1`}></i> Refresh
+                    <i className={`fa-solid fa-rotate-right ${status === 'loading' ? 'fa-spin' : ''} mr-1`}></i> Refresh Data
                   </button>
                 </div>
                 
@@ -127,27 +152,42 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                   <table className="w-full text-left text-sm text-gray-300">
                     <thead className="bg-white/5 text-white uppercase text-xs font-bold">
                       <tr>
-                        <th className="p-3">Date</th>
-                        <th className="p-3">Name</th>
-                        <th className="p-3">Grade</th>
-                        <th className="p-3">Phone</th>
-                        <th className="p-3">Source</th>
+                        <th className="p-4">Date</th>
+                        <th className="p-4">Name</th>
+                        <th className="p-4">Grade</th>
+                        <th className="p-4">Phone</th>
+                        <th className="p-4">Message</th>
+                        <th className="p-4">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
-                      {leads.map((lead, idx) => (
-                        <tr key={idx} className="hover:bg-white/5">
-                          <td className="p-3 whitespace-nowrap opacity-60">
-                            {new Date(lead.timestamp).toLocaleDateString()}
-                          </td>
-                          <td className="p-3 font-semibold text-white">{lead.name}</td>
-                          <td className="p-3">{lead.grade}</td>
-                          <td className="p-3 font-mono text-primary">{lead.phone}</td>
-                          <td className="p-3 text-xs">
-                            <span className="bg-white/10 px-2 py-1 rounded">{lead.source}</span>
-                          </td>
-                        </tr>
-                      ))}
+                      {leads.length === 0 ? (
+                         <tr>
+                             <td colSpan={6} className="p-8 text-center text-muted">No valid leads found yet.</td>
+                         </tr>
+                      ) : (
+                        leads.map((lead, idx) => (
+                            <tr key={idx} className="hover:bg-white/5 transition-colors">
+                              <td className="p-4 whitespace-nowrap opacity-60">
+                                {new Date(lead.timestamp).toLocaleDateString()}
+                              </td>
+                              <td className="p-4 font-semibold text-white">{lead.name}</td>
+                              <td className="p-4">{lead.grade}</td>
+                              <td className="p-4 font-mono text-primary">{lead.phone}</td>
+                              <td className="p-4 max-w-xs truncate" title={lead.message}>{lead.message || '-'}</td>
+                              <td className="p-4">
+                                <a 
+                                    href={getWhatsAppLink(lead)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb855] text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-lg hover:shadow-green-500/20"
+                                >
+                                    <i className="fa-brands fa-whatsapp text-sm"></i> Chat
+                                </a>
+                              </td>
+                            </tr>
+                          ))
+                      )}
                     </tbody>
                   </table>
                 </div>
