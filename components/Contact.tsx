@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { https://script.google.com/macros/s/AKfycby45RBg-tlFMNqRFIiIFjsqEkmqjA57CbfaI__TKbtMYK-InSvzAJx5K36qgUj0txOmUQ/exec } from '../config';
+import { https://script.google.com/macros/s/AKfycbx5bwkpeTO0KQ1GWNlwQZ-Jmzr3mEYJN7BcvRf16HmoSw5uHqwtWQB6SCzeuUUs8Yog3A/exec } from '../config';
 
 const Contact: React.FC = () => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -21,7 +21,7 @@ const Contact: React.FC = () => {
 
     try {
       // Using 'text/plain' Content-Type avoids CORS preflight checks for simple POST
-      await fetch(https://script.google.com/macros/s/AKfycby45RBg-tlFMNqRFIiIFjsqEkmqjA57CbfaI__TKbtMYK-InSvzAJx5K36qgUj0txOmUQ/exec, {
+      await fetch(https://script.google.com/macros/s/AKfycbx5bwkpeTO0KQ1GWNlwQZ-Jmzr3mEYJN7BcvRf16HmoSw5uHqwtWQB6SCzeuUUs8Yog3A/exec, {
         method: 'POST',
         body: JSON.stringify({ ...formData, action: 'submit', source: 'Contact Form' }),
       });
