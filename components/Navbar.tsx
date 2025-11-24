@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link } from 'react-scroll';
+import { useAdmission } from './AdmissionContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { openModal } = useAdmission();
 
-  // INSTRUCTION: Replace the URL below with the link to your actual logo image.
-  // You can upload your image to a folder in your project (e.g., /public/logo.png) or use an external URL.
+  // INSTRUCTION: Replace this URL with your uploaded logo image link
   const LOGO_URL = "https://placehold.co/100x100/00bfa6/ffffff?text=S";
 
   useEffect(() => {
@@ -32,11 +33,11 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-20">
           <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             {/* Logo Image */}
-            <div className="bg-gradient-to-br from-primary to-secondary p-1 rounded-lg mr-3">
+            <div className="bg-gradient-to-br from-primary to-secondary p-1 rounded-lg mr-3 shadow-lg">
                <img 
                  src={LOGO_URL} 
                  alt="Smart Step Academy Logo" 
-                 className="h-8 w-8 object-cover rounded" 
+                 className="h-8 w-8 object-cover rounded bg-white" 
                />
             </div>
             <span className="font-bold text-xl tracking-tight text-white">
@@ -57,14 +58,12 @@ const Navbar: React.FC = () => {
                   {link.name}
                 </Link>
               ))}
-              <Link
-                 to="contact"
-                 smooth={true}
-                 duration={500}
+              <button
+                 onClick={openModal}
                  className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-dark px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer"
               >
-                Enroll Now
-              </Link>
+                Start Admission Process
+              </button>
             </div>
           </div>
           
@@ -95,15 +94,15 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
-             <Link
-                 to="contact"
-                 smooth={true}
-                 duration={500}
-                 onClick={() => setIsOpen(false)}
+             <button
+                 onClick={() => {
+                   setIsOpen(false);
+                   openModal();
+                 }}
                  className="block w-full text-center mt-4 bg-primary text-dark font-bold px-4 py-3 rounded-lg"
               >
-                Enroll Now
-              </Link>
+                Start Admission Process
+              </button>
           </div>
         </div>
       )}

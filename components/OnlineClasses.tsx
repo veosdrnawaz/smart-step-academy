@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Video, Clock, Users, FileText, ChevronRight } from 'lucide-react';
-import { Link } from 'react-scroll';
+import { Globe, Clock, Users, ChevronRight } from 'lucide-react';
+import { useAdmission } from './AdmissionContext';
 
 const OnlineClasses: React.FC = () => {
+  const { openModal } = useAdmission();
+
   return (
     <section id="online" className="py-20 bg-dark relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -108,9 +110,12 @@ const OnlineClasses: React.FC = () => {
                 ))}
               </div>
               <div className="mt-8">
-                <Link to="contact" smooth={true} duration={500} className="w-full block text-center bg-primary text-dark py-3 rounded-lg font-bold hover:bg-secondary transition-colors cursor-pointer">
+                <button 
+                  onClick={openModal}
+                  className="w-full block text-center bg-primary text-dark py-3 rounded-lg font-bold hover:bg-secondary transition-colors cursor-pointer"
+                >
                   Start Admission Process
-                </Link>
+                </button>
               </div>
             </motion.div>
           </div>

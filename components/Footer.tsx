@@ -3,7 +3,7 @@ import { Facebook, Instagram, Twitter } from 'lucide-react';
 import { Link } from 'react-scroll';
 
 const Footer: React.FC = () => {
-  // Same logo logic as Navbar
+  // INSTRUCTION: Replace this URL with your uploaded logo image link
   const LOGO_URL = "https://placehold.co/100x100/00bfa6/ffffff?text=S";
 
   const navItems = [
@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
                  <img 
                    src={LOGO_URL} 
                    alt="Smart Step Academy Logo" 
-                   className="h-8 w-8 object-cover rounded" 
+                   className="h-8 w-8 object-cover rounded bg-white" 
                  />
               </div>
               <span className="font-bold text-xl text-white">

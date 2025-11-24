@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-scroll';
 import { ArrowRight, Phone, CheckCircle } from 'lucide-react';
+import { useAdmission } from './AdmissionContext';
 
 const Hero: React.FC = () => {
+  const { openModal } = useAdmission();
+
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden" id="home">
       {/* Background gradients */}
@@ -35,14 +37,12 @@ const Hero: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
           >
-            <Link
-              to="contact"
-              smooth={true}
-              duration={500}
+            <button
+              onClick={openModal}
               className="w-full sm:w-auto px-8 py-4 bg-primary text-dark font-bold rounded-lg shadow-[0_0_20px_rgba(0,191,166,0.3)] hover:shadow-[0_0_30px_rgba(0,191,166,0.5)] hover:bg-secondary transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer transform hover:-translate-y-1"
             >
-              Book a Trial Class <ArrowRight className="w-5 h-5" />
-            </Link>
+              Start Admission Process <ArrowRight className="w-5 h-5" />
+            </button>
             <a
               href="tel:+923261658636"
               className="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm"

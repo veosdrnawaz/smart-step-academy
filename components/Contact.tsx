@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Clock, Send, AlertCircle, CheckCircle } from 'lucide-react';
 
-// INSTRUCTION: Replace this URL with your actual Google Apps Script Web App URL
+// INSTRUCTION: 
+// 1. Open the file 'google-apps-script.js' in your project.
+// 2. Follow the instructions there to deploy your Google Sheet backend.
+// 3. Paste your Web App URL inside the quotes below.
 const GOOGLE_SCRIPT_URL = "YOUR_DEPLOYED_GOOGLE_SCRIPT_URL_HERE";
 
 const Contact: React.FC = () => {
@@ -21,7 +24,7 @@ const Contact: React.FC = () => {
     e.preventDefault();
     
     if (GOOGLE_SCRIPT_URL === "YOUR_DEPLOYED_GOOGLE_SCRIPT_URL_HERE") {
-        alert("Please configure the Google Script URL in components/Contact.tsx code first.");
+        alert("Please set up the Google Sheet backend first. Instructions are in google-apps-script.js");
         return;
     }
 

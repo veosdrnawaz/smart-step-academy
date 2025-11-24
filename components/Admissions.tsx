@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link } from 'react-scroll';
 import { ArrowRight } from 'lucide-react';
+import { useAdmission } from './AdmissionContext';
 
 const Admissions: React.FC = () => {
+  const { openModal } = useAdmission();
+
   return (
     <section className="py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,14 +17,12 @@ const Admissions: React.FC = () => {
                <span className="bg-dark/10 px-3 py-1 rounded-full text-dark font-semibold text-sm">Free Trial Class</span>
             </div>
           </div>
-          <Link 
-            to="contact"
-            smooth={true}
-            duration={500}
+          <button 
+            onClick={openModal}
             className="whitespace-nowrap bg-dark text-white px-8 py-4 rounded-xl font-bold hover:scale-105 transition-transform duration-300 flex items-center gap-2 cursor-pointer shadow-xl"
           >
-            Enroll Now <ArrowRight className="w-5 h-5" />
-          </Link>
+            Start Admission Process <ArrowRight className="w-5 h-5" />
+          </button>
         </div>
       </div>
     </section>
