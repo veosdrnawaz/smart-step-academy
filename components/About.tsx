@@ -1,11 +1,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ASSETS } from '../config';
 
 const About: React.FC = () => {
-  const MAIN_IMAGE_URL = "https://images.unsplash.com/photo-1544531679-dad933946664?auto=format&fit=crop&q=80&w=800"; 
-  const SECONDARY_IMAGE_URL = "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600";
-
   const cards = [
     {
       icon: "fa-bullseye",
@@ -63,15 +61,15 @@ const About: React.FC = () => {
                 className="relative h-[500px] w-full hidden md:block"
             >
                 <div className="absolute top-0 right-0 w-4/5 h-4/5 rounded-2xl overflow-hidden shadow-2xl border border-white/10 z-10">
-                    <img src={MAIN_IMAGE_URL} alt="Academy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                    <img src={ASSETS.ABOUT_MAIN} alt="Academy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
                 <div className="absolute bottom-0 left-0 w-3/5 h-3/5 rounded-2xl overflow-hidden shadow-2xl border-2 border-dark z-20">
-                     <img src={SECONDARY_IMAGE_URL} alt="Student" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                     <img src={ASSETS.ABOUT_SECONDARY} alt="Student" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
             </motion.div>
              
             <div className="md:hidden mt-8">
-                 <img src={MAIN_IMAGE_URL} alt="Academy" className="w-full rounded-2xl shadow-lg mb-4" />
+                 <img src={ASSETS.ABOUT_MAIN} alt="Academy" className="w-full rounded-2xl shadow-lg mb-4" />
             </div>
         </div>
 

@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-scroll';
 import { useAdmission } from './AdmissionContext';
+import { ASSETS } from '../config';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { openModal } = useAdmission();
-  const LOGO_URL = "https://placehold.co/100x100/00bfa6/ffffff?text=S";
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <div className="bg-gradient-to-br from-primary to-secondary p-1 rounded-lg mr-3 shadow-lg">
-                 <img src={LOGO_URL} alt="Logo" className="h-8 w-8 object-cover rounded bg-white" />
+                 <img src={ASSETS.LOGO} alt="Logo" className="h-8 w-8 object-cover rounded bg-white" />
               </div>
               <span className="font-bold text-xl tracking-tight text-white">
                 Smart Step <span className="text-primary">Academy</span>

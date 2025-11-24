@@ -1,14 +1,13 @@
 
 import React from 'react';
 import { Link } from 'react-scroll';
+import { ASSETS } from '../config';
 
 interface FooterProps {
   onOpenAdmin: () => void;
 }
 
 const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
-  const LOGO_URL = "https://placehold.co/100x100/00bfa6/ffffff?text=S";
-
   const navItems = [
     { name: 'Home', to: 'home' },
     { name: 'About', to: 'about' },
@@ -24,7 +23,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center mb-4">
               <div className="bg-primary/20 p-1 rounded-lg mr-3">
-                 <img src={LOGO_URL} alt="Logo" className="h-8 w-8 object-cover rounded bg-white" />
+                 <img src={ASSETS.LOGO} alt="Logo" className="h-8 w-8 object-cover rounded bg-white" />
               </div>
               <span className="font-bold text-xl text-white">Smart Step</span>
             </div>
