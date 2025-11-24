@@ -23,9 +23,9 @@ const About: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-dark relative overflow-hidden">
+    <section id="about" className="py-16 md:py-20 bg-dark relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16 md:mb-20">
             <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -53,12 +53,13 @@ const About: React.FC = () => {
                 </div>
             </motion.div>
 
+            {/* Responsive Layered Images: Visible on all devices, height scales with screen */}
             <motion.div
                 initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="relative h-[500px] w-full hidden md:block"
+                className="relative h-[320px] sm:h-[400px] lg:h-[500px] w-full mt-10 lg:mt-0"
             >
                 <div className="absolute top-0 right-0 w-4/5 h-4/5 rounded-2xl overflow-hidden shadow-2xl border border-white/10 z-10">
                     <img src={ASSETS.ABOUT_MAIN} alt="Academy" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
@@ -67,13 +68,9 @@ const About: React.FC = () => {
                      <img src={ASSETS.ABOUT_SECONDARY} alt="Student" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                 </div>
             </motion.div>
-             
-            <div className="md:hidden mt-8">
-                 <img src={ASSETS.ABOUT_MAIN} alt="Academy" className="w-full rounded-2xl shadow-lg mb-4" />
-            </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {cards.map((card, index) => (
             <motion.div
               key={index}
@@ -81,13 +78,13 @@ const About: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.2 }}
-              className="bg-card border border-white/5 p-8 rounded-2xl hover:border-primary/30 transition-all duration-300 hover:shadow-lg group"
+              className="bg-card border border-white/5 p-6 md:p-8 rounded-2xl hover:border-primary/30 transition-all duration-300 hover:shadow-lg group"
             >
-              <div className="bg-white/5 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 text-2xl text-primary">
+              <div className="bg-white/5 w-14 h-14 md:w-16 md:h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 text-xl md:text-2xl text-primary">
                 <i className={`fa-solid ${card.icon}`}></i>
               </div>
               <h3 className="text-xl font-bold text-white mb-3">{card.title}</h3>
-              <p className="text-muted leading-relaxed">{card.description}</p>
+              <p className="text-muted leading-relaxed text-sm md:text-base">{card.description}</p>
             </motion.div>
           ))}
         </div>

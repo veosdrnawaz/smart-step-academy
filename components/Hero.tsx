@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
   const { openModal } = useAdmission();
 
   return (
-    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden" id="home">
+    <section className="relative pt-28 pb-16 lg:pt-48 lg:pb-32 overflow-hidden" id="home">
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] -z-10" />
       <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-[96px] -z-10" />
 
@@ -22,11 +22,11 @@ const Hero: React.FC = () => {
               <span className="w-2 h-2 rounded-full bg-primary"></span>
               Admissions Open 2024-25
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight mb-8">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight">
               Expert Tuition That <br className="hidden md:block"/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Delivers Results</span>
             </h1>
-            <p className="text-lg sm:text-xl text-muted mb-10 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-muted mb-10 leading-relaxed max-w-2xl mx-auto px-2">
               Stop struggling with grades. Get specialized coaching for English, Science, and Math from Play Group to Matric. Taught by Private School experts in Faisalabad.
             </p>
           </motion.div>
@@ -35,7 +35,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 w-full px-4 sm:px-0"
           >
             <button
               onClick={openModal}
@@ -55,7 +55,7 @@ const Hero: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-wrap justify-center gap-6 text-sm text-muted"
+            className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-muted px-4"
           >
             <div className="flex items-center gap-2">
               <i className="fa-solid fa-check-circle text-primary"></i> 3-Day Free Trial
