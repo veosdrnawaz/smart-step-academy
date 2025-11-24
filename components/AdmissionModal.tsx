@@ -9,7 +9,7 @@ interface AdmissionModalProps {
 
 // NOTE: Ensure you use the same Google Script URL here as in Contact.tsx
 // If you haven't deployed it yet, check google-apps-script.js
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhULWVe-M1G8IjtBRZoS2h9UYDCUAv1okFkABPeWpNvHcz0fJjubMw19Ohtl_Q59c5ow/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGel1jQ1lkOHtP5PBOnbyOOpniX2NIakWGFCryiTRAvdkvpqGht908sitmh6Gr9TUuxQ/exec";
 
 const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
