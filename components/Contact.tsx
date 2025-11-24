@@ -5,7 +5,7 @@ import { MapPin, Phone, Clock, Send, AlertCircle, CheckCircle } from 'lucide-rea
 // 1. Open the file 'google-apps-script.js' in your project.
 // 2. Follow the instructions there to deploy your Google Sheet backend.
 // 3. Paste your Web App URL inside the quotes below.
-const GOOGLE_SCRIPT_URL = "YOUR_DEPLOYED_GOOGLE_SCRIPT_URL_HERE";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhULWVe-M1G8IjtBRZoS2h9UYDCUAv1okFkABPeWpNvHcz0fJjubMw19Ohtl_Q59c5ow/exec";
 
 const Contact: React.FC = () => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -23,11 +23,6 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (GOOGLE_SCRIPT_URL === "YOUR_DEPLOYED_GOOGLE_SCRIPT_URL_HERE") {
-        alert("Please set up the Google Sheet backend first. Instructions are in google-apps-script.js");
-        return;
-    }
-
     setFormStatus('submitting');
 
     try {

@@ -9,7 +9,7 @@ interface AdmissionModalProps {
 
 // NOTE: Ensure you use the same Google Script URL here as in Contact.tsx
 // If you haven't deployed it yet, check google-apps-script.js
-const GOOGLE_SCRIPT_URL = "YOUR_DEPLOYED_GOOGLE_SCRIPT_URL_HERE";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyhULWVe-M1G8IjtBRZoS2h9UYDCUAv1okFkABPeWpNvHcz0fJjubMw19Ohtl_Q59c5ow/exec";
 
 const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -27,11 +27,6 @@ const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (GOOGLE_SCRIPT_URL === "YOUR_DEPLOYED_GOOGLE_SCRIPT_URL_HERE") {
-        alert("Please set up the Google Sheet backend first. Instructions are in google-apps-script.js");
-        return;
-    }
-
     setFormStatus('submitting');
 
     try {
