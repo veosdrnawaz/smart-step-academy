@@ -14,7 +14,7 @@
 
 // --- CONFIGURATION ---
 var SHEET_NAME = "Sheet1";
-var ADMIN_PASSWORD = "admin"; // CHANGE THIS PASSWORD!
+var ADMIN_PASSWORD = "Nida123"; // Updated Password
 
 // --- SETUP FUNCTION ---
 function onOpen() {
