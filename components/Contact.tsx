@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
-import { MapPin, Phone, Clock, Send, AlertCircle, CheckCircle } from 'lucide-react';
 
-// INSTRUCTION: 
-// 1. Open the file 'google-apps-script.js' in your project.
-// 2. Follow the instructions there to deploy your Google Sheet backend.
-// 3. Paste your Web App URL inside the quotes below.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzGel1jQ1lkOHtP5PBOnbyOOpniX2NIakWGFCryiTRAvdkvpqGht908sitmh6Gr9TUuxQ/exec";
+import React, { useState } from 'react';
+import { GOOGLE_SCRIPT_URL } from '../config';
 
 const Contact: React.FC = () => {
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -22,23 +17,18 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     setFormStatus('submitting');
 
     try {
+      // Using 'text/plain' Content-Type avoids CORS preflight checks for simple POST
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', // Important for Google Apps Script
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, action: 'submit', source: 'Contact Form' }),
       });
 
-      // Since mode is no-cors, we assume success if no network error was thrown
+      // We assume success if no network error occurred (since no-cors/opaque response)
       setFormStatus('success');
       setFormData({ name: '', grade: '', phone: '', message: '' });
-      
       setTimeout(() => setFormStatus('idle'), 5000);
     } catch (error) {
       console.error("Error submitting form", error);
@@ -52,55 +42,52 @@ const Contact: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white">Contact Us</h2>
-          <p className="mt-4 text-muted">Visit us for a campus tour or book a free trial class.</p>
+          <p className="mt-4 text-muted">Visit our campus or call us today.</p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Info */}
           <div className="space-y-8">
             <div className="bg-card border border-white/5 p-8 rounded-2xl shadow-xl">
-              <h3 className="text-xl font-bold text-white mb-6">Academy Information</h3>
+              <h3 className="text-xl font-bold text-white mb-6">Academy Info</h3>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="bg-primary/20 p-3 rounded-lg">
-                    <MapPin className="w-6 h-6 text-primary" />
+                  <div className="bg-primary/20 w-10 h-10 flex items-center justify-center rounded-lg text-primary text-lg">
+                    <i className="fa-solid fa-map-pin"></i>
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold">Location</h4>
-                    <p className="text-muted">People’s Colony No. 2, Faisalabad, Pakistan</p>
+                    <h4 className="text-white font-semibold">Address</h4>
+                    <p className="text-muted">People’s Colony No. 2, Faisalabad</p>
                   </div>
                 </div>
                 
                 <div className="flex items-start gap-4">
-                  <div className="bg-primary/20 p-3 rounded-lg">
-                    <Phone className="w-6 h-6 text-primary" />
+                  <div className="bg-primary/20 w-10 h-10 flex items-center justify-center rounded-lg text-primary text-lg">
+                    <i className="fa-solid fa-phone"></i>
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold">Phone & WhatsApp</h4>
+                    <h4 className="text-white font-semibold">Call / WhatsApp</h4>
                     <a href="tel:+923261658636" className="text-muted hover:text-primary transition-colors">+92 326 1658636</a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="bg-primary/20 p-3 rounded-lg">
-                    <Clock className="w-6 h-6 text-primary" />
+                  <div className="bg-primary/20 w-10 h-10 flex items-center justify-center rounded-lg text-primary text-lg">
+                    <i className="fa-solid fa-clock"></i>
                   </div>
                   <div>
-                    <h4 className="text-white font-semibold">Office Hours</h4>
-                    <p className="text-muted">Monday - Saturday: 2:00 PM - 8:00 PM</p>
-                    <p className="text-muted text-sm mt-1">Sunday: Closed</p>
+                    <h4 className="text-white font-semibold">Timings</h4>
+                    <p className="text-muted">Mon - Sat: 2:00 PM - 8:00 PM</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Google Map Placeholder - Visual Representation */}
             <div className="w-full h-64 bg-card rounded-2xl overflow-hidden border border-white/5 flex items-center justify-center relative group shadow-lg">
                 <div className="absolute inset-0 bg-slate-800 opacity-50"></div>
-                {/* Simulated Map Background */}
                 <div className="absolute inset-0 opacity-20 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/ec/Faisalabad_montage.jpg')] bg-cover bg-center"></div>
                 <div className="z-10 text-center p-4 bg-dark/80 backdrop-blur-sm rounded-xl">
-                    <MapPin className="w-10 h-10 text-red-500 mx-auto mb-2 drop-shadow-lg" />
+                    <i className="fa-solid fa-location-dot text-4xl text-red-500 mb-2"></i>
                     <p className="text-white font-bold">People's Colony No. 2</p>
                     <a 
                         href="https://www.google.com/maps/search/?api=1&query=Peoples+Colony+No+2+Faisalabad" 
@@ -108,7 +95,7 @@ const Contact: React.FC = () => {
                         rel="noopener noreferrer"
                         className="text-primary text-sm hover:underline mt-1 block"
                     >
-                        View on Google Maps
+                        Open in Maps
                     </a>
                 </div>
             </div>
@@ -116,79 +103,46 @@ const Contact: React.FC = () => {
 
           {/* Form */}
           <div className="bg-card border border-white/5 p-8 rounded-2xl shadow-xl">
-            <h3 className="text-xl font-bold text-white mb-6">Send a Message</h3>
+            <h3 className="text-xl font-bold text-white mb-6">Send Message</h3>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-muted mb-2">Student Name</label>
-                  <input 
-                    type="text" 
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required 
-                    className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" 
-                    placeholder="Ali Khan" 
-                  />
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} required className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" placeholder="Ali Khan" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-muted mb-2">Class / Grade</label>
-                  <input 
-                    type="text" 
-                    name="grade"
-                    value={formData.grade}
-                    onChange={handleChange}
-                    required 
-                    className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" 
-                    placeholder="e.g. Class 5" 
-                  />
+                  <label className="block text-sm font-medium text-muted mb-2">Class</label>
+                  <input type="text" name="grade" value={formData.grade} onChange={handleChange} required className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" placeholder="Class 5" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-muted mb-2">Phone Number</label>
-                <input 
-                  type="tel" 
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required 
-                  className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" 
-                  placeholder="+92 326 1658636" 
-                />
+                <label className="block text-sm font-medium text-muted mb-2">Phone</label>
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" placeholder="0300 1234567" />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-muted mb-2">Message</label>
-                <textarea 
-                  rows={4} 
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" 
-                  placeholder="I am interested in..." 
-                />
+                <textarea rows={4} name="message" value={formData.message} onChange={handleChange} className="w-full bg-dark border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors" placeholder="I want to know about..." />
               </div>
 
               <button 
                 type="submit" 
                 disabled={formStatus === 'submitting'}
-                className="w-full bg-primary text-dark font-bold py-4 rounded-lg hover:bg-secondary transition-all duration-300 flex items-center justify-center gap-2 group relative overflow-hidden disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-dark font-bold py-4 rounded-lg hover:bg-secondary transition-all duration-300 flex items-center justify-center gap-2"
               >
                 {formStatus === 'submitting' ? (
                   <span>Sending...</span>
                 ) : formStatus === 'success' ? (
-                  <span className="flex items-center gap-2"><CheckCircle className="w-5 h-5"/> Message Sent!</span>
+                  <span className="flex items-center gap-2"><i className="fa-solid fa-check"></i> Sent!</span>
                 ) : formStatus === 'error' ? (
-                  <span className="flex items-center gap-2"><AlertCircle className="w-5 h-5"/> Try Again</span>
+                  <span className="flex items-center gap-2"><i className="fa-solid fa-triangle-exclamation"></i> Error</span>
                 ) : (
                     <>
-                        <span>Submit Inquiry</span>
-                        <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        <span>Submit</span>
+                        <i className="fa-solid fa-paper-plane"></i>
                     </>
                 )}
-                {/* Ripple Effect Container */}
-                <span className="absolute inset-0 bg-white/20 scale-0 group-hover:scale-100 transition-transform duration-500 rounded-lg origin-center"></span>
               </button>
             </form>
           </div>

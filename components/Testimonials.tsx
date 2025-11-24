@@ -1,23 +1,23 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Quote } from 'lucide-react';
 
 const Testimonials: React.FC = () => {
   const reviews = [
     {
       name: "Mrs. Ahmed",
       role: "Parent (Class 5)",
-      text: "My son's English has improved remarkably in just 3 months. The teacher pays individual attention to grammar and speaking."
+      text: "My son's English improved so much in just 3 months. The teacher really focuses on grammar."
     },
     {
       name: "Ali Raza",
       role: "Student (Matric)",
-      text: "I was struggling with Science subjects, but the concept-based teaching here helped me score high marks in my exams."
+      text: "I used to hate Physics, but the concepts are so clear here. I scored great marks in my send-ups."
     },
     {
       name: "Mrs. Fatima",
       role: "Parent (Play Group)",
-      text: "A very safe and friendly environment for small kids. My daughter loves going to Smart Step Academy."
+      text: "Very safe and friendly place for small kids. My daughter loves going to Smart Step."
     }
   ];
 
@@ -25,7 +25,7 @@ const Testimonials: React.FC = () => {
     <section className="py-20 bg-dark relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <h2 className="text-3xl font-bold text-center text-white mb-12">Parents & Students Love Us</h2>
+        <h2 className="text-3xl font-bold text-center text-white mb-12">What Parents Say</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {reviews.map((review, index) => (
@@ -37,7 +37,7 @@ const Testimonials: React.FC = () => {
               transition={{ delay: index * 0.2 }}
               className="bg-gradient-to-br from-white/10 to-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-sm"
             >
-              <Quote className="w-8 h-8 text-primary mb-4 opacity-50" />
+              <i className="fa-solid fa-quote-left text-primary text-2xl mb-4 opacity-50"></i>
               <p className="text-gray-300 italic mb-6">"{review.text}"</p>
               <div>
                 <h4 className="text-white font-bold">{review.name}</h4>

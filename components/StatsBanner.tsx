@@ -1,13 +1,13 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, BookOpen, Trophy, Clock } from 'lucide-react';
 
 const StatsBanner: React.FC = () => {
   const stats = [
-    { icon: <Users className="w-6 h-6" />, value: "500+", label: "Happy Students" },
-    { icon: <Trophy className="w-6 h-6" />, value: "100%", label: "Pass Rate" },
-    { icon: <BookOpen className="w-6 h-6" />, value: "15+", label: "Expert Teachers" },
-    { icon: <Clock className="w-6 h-6" />, value: "10+", label: "Years Experience" },
+    { icon: "fa-users", value: "500+", label: "Happy Students" },
+    { icon: "fa-trophy", value: "100%", label: "Pass Rate" },
+    { icon: "fa-chalkboard-user", value: "15+", label: "Expert Teachers" },
+    { icon: "fa-clock", value: "10+", label: "Years Experience" },
   ];
 
   return (
@@ -23,8 +23,8 @@ const StatsBanner: React.FC = () => {
               transition={{ delay: index * 0.1 }}
               className="flex flex-col items-center justify-center text-center"
             >
-              <div className="bg-primary/10 p-3 rounded-full text-primary mb-3">
-                {stat.icon}
+              <div className="bg-primary/10 w-12 h-12 flex items-center justify-center rounded-full text-primary mb-3 text-xl">
+                <i className={`fa-solid ${stat.icon}`}></i>
               </div>
               <h4 className="text-2xl md:text-3xl font-bold text-white">{stat.value}</h4>
               <p className="text-muted text-sm uppercase tracking-wider font-medium">{stat.label}</p>

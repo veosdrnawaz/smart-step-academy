@@ -1,121 +1,115 @@
+
 /**
  * =========================================================
- * SMART STEP ACADEMY - GOOGLE SHEETS BACKEND
+ * SMART STEP ACADEMY - BACKEND & ADMIN SYSTEM
  * =========================================================
  * 
  * INSTRUCTIONS:
- * 1. Open your Google Sheet.
- * 2. Go to Extensions > Apps Script.
- * 3. Delete any existing code and PASTE all the code below.
- * 4. Save the project (Ctrl+S).
- * 5. Refresh your Google Sheet tab.
- * 6. You will see a new menu "Smart Step Admin" in the toolbar (after Help).
- * 7. Click "Smart Step Admin" > "Setup Sheet Database" to automatically configure headers.
- * 8. To connect to website: Click "Deploy" > "New Deployment" > Type: "Web app" > Who has access: "Anyone" > Deploy.
+ * 1. Paste this code into your Google Apps Script editor.
+ * 2. Save (Ctrl+S).
+ * 3. Click "Smart Step Admin" > "Setup Sheet" in the toolbar (refresh sheet if menu missing).
+ * 4. Deploy > New Deployment > Web App > Access: "Anyone" > Deploy.
+ * 5. Copy the URL and paste it into your website code (src/config.ts).
  */
 
-// CONFIGURATION
-// Ensure the name inside the quotes matches your Google Sheet tab name exactly.
+// --- CONFIGURATION ---
 var SHEET_NAME = "Sheet1";
+var ADMIN_PASSWORD = "admin"; // CHANGE THIS PASSWORD!
 
-// 1. CREATE CUSTOM MENU
+// --- SETUP FUNCTION ---
 function onOpen() {
-  const ui = SpreadsheetApp.getUi();
-  ui.createMenu('Smart Step Admin')
-      .addItem('Setup Sheet Database', 'setupSheet')
-      .addToUi();
+  SpreadsheetApp.getUi()
+    .createMenu('Smart Step Admin')
+    .addItem('Setup Sheet', 'setupSheet')
+    .addToUi();
 }
 
-// 2. AUTOMATIC SHEET SETUP
 function setupSheet() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(SHEET_NAME);
-  const ui = SpreadsheetApp.getUi();
-  
-  // Create sheet if it doesn't exist
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-  } else {
-    // Check if sheet already has data to prevent accidental overwrite
-    if (sheet.getLastRow() > 1) {
-      const response = ui.alert(
-        'Existing Data Detected', 
-        'The sheet "' + SHEET_NAME + '" seems to have data. Initializing might mess up existing headers. Do you want to continue?', 
-        ui.ButtonSet.YES_NO
-      );
-      if (response == ui.Button.NO) return;
-    }
   }
-
-  // Activate the sheet
-  sheet.activate();
-
-  // Define the Columns
-  // Added "Source" to track if it came from the Admission Modal or Contact Form
-  const headers = ["Timestamp", "Student Name", "Grade/Class", "Phone", "Message", "Source"];
   
-  // Set Headers at Row 1
-  const headerRange = sheet.getRange(1, 1, 1, headers.length);
+  // Headers
+  var headers = ["Timestamp", "Student Name", "Grade", "Phone", "Message", "Source", "Status"];
+  var headerRange = sheet.getRange(1, 1, 1, headers.length);
   headerRange.setValues([headers]);
-  
-  // Apply Styling
-  headerRange.setFontWeight("bold");
-  headerRange.setBackground("#00bfa6"); // The website's primary teal color
-  headerRange.setFontColor("#ffffff");
-  headerRange.setHorizontalAlignment("center");
-  headerRange.setVerticalAlignment("middle");
-  sheet.setRowHeight(1, 40); // Make header row taller
-  
-  // Freeze Top Row so it stays visible while scrolling
+  headerRange.setFontWeight("bold").setBackground("#00bfa6").setFontColor("white");
   sheet.setFrozenRows(1);
-  
-  // Adjust Column Widths for better readability
-  sheet.setColumnWidth(1, 150); // Timestamp
-  sheet.setColumnWidth(2, 150); // Name
-  sheet.setColumnWidth(3, 100); // Grade
-  sheet.setColumnWidth(4, 120); // Phone
-  sheet.setColumnWidth(5, 300); // Message
-  sheet.setColumnWidth(6, 120); // Source
-  
-  ui.alert('Success!', 'Sheet "' + SHEET_NAME + '" has been successfully configured.', ui.ButtonSet.OK);
 }
 
-// 3. HANDLE WEBSITE FORM SUBMISSIONS (POST)
+// --- MAIN API HANDLER (POST) ---
 function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+  
   try {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName(SHEET_NAME);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName(SHEET_NAME);
     
-    if (!sheet) {
-       return ContentService.createTextOutput(JSON.stringify({ 'result': 'error', 'error': 'Sheet not found: ' + SHEET_NAME }))
-      .setMimeType(ContentService.MimeType.JSON);
+    // Parse Data
+    var rawData = e.postData.contents;
+    var data = JSON.parse(rawData);
+    var action = data.action || "submit"; // 'submit', 'login', 'get_leads'
+    
+    var response = {};
+    
+    // --- ACTION: SUBMIT FORM ---
+    if (action === "submit") {
+      var timestamp = new Date();
+      sheet.appendRow([
+        timestamp,
+        data.name || "",
+        data.grade || "",
+        data.phone || "",
+        data.message || "",
+        data.source || "Website",
+        "New"
+      ]);
+      response = { status: "success", message: "Data saved" };
     }
     
-    // Parse the data sent from the website
-    // If e.postData is undefined, we handle it gracefully
-    const data = e.postData ? JSON.parse(e.postData.contents) : {};
+    // --- ACTION: ADMIN LOGIN ---
+    else if (action === "login") {
+      if (data.password === ADMIN_PASSWORD) {
+        response = { status: "success", message: "Authenticated" };
+      } else {
+        response = { status: "error", message: "Invalid Password" };
+      }
+    }
     
-    const timestamp = new Date();
-    const name = data.name || "N/A";
-    const grade = data.grade || "N/A";
-    const phone = data.phone || "N/A";
-    const message = data.message || "N/A";
-    // We default to 'Website Contact Form' if source isn't provided
-    const source = data.source || "Website Contact Form"; 
-
-    // Append the data
-    sheet.appendRow([timestamp, name, grade, phone, message, source]);
+    // --- ACTION: GET LEADS (ADMIN) ---
+    else if (action === "get_leads") {
+      if (data.password === ADMIN_PASSWORD) {
+        var rows = sheet.getDataRange().getValues();
+        var headers = rows.shift(); // Remove headers
+        // Convert to array of objects
+        var leads = rows.map(function(row) {
+          return {
+            timestamp: row[0],
+            name: row[1],
+            grade: row[2],
+            phone: row[3],
+            message: row[4],
+            source: row[5],
+            status: row[6]
+          };
+        }).reverse(); // Show newest first
+        
+        response = { status: "success", data: leads };
+      } else {
+        response = { status: "error", message: "Unauthorized" };
+      }
+    }
     
-    return ContentService.createTextOutput(JSON.stringify({ 'result': 'success' }))
+    return ContentService.createTextOutput(JSON.stringify(response))
       .setMimeType(ContentService.MimeType.JSON);
       
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ 'result': 'error', 'error': error.toString() }))
+  } catch (e) {
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: e.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
   }
-}
-
-// 4. TEST FUNCTION (GET)
-function doGet(e) {
-  return ContentService.createTextOutput("Smart Step Academy Backend is Online. Target Sheet: " + SHEET_NAME);
 }
