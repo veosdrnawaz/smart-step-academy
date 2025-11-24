@@ -14,6 +14,10 @@
  * 8. To connect to website: Click "Deploy" > "New Deployment" > Type: "Web app" > Who has access: "Anyone" > Deploy.
  */
 
+// CONFIGURATION
+// Ensure the name inside the quotes matches your Google Sheet tab name exactly.
+var SHEET_NAME = "Sheet1";
+
 // 1. CREATE CUSTOM MENU
 function onOpen() {
   const ui = SpreadsheetApp.getUi();
@@ -24,18 +28,27 @@ function onOpen() {
 
 // 2. AUTOMATIC SHEET SETUP
 function setupSheet() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
   const ui = SpreadsheetApp.getUi();
   
-  // Check if sheet already has data to prevent accidental overwrite (optional safety check)
-  if (sheet.getLastRow() > 1) {
-    const response = ui.alert(
-      'Existing Data Detected', 
-      'This sheet seems to have data. Initializing might mess up existing headers. Do you want to continue and re-format the headers?', 
-      ui.ButtonSet.YES_NO
-    );
-    if (response == ui.Button.NO) return;
+  // Create sheet if it doesn't exist
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+  } else {
+    // Check if sheet already has data to prevent accidental overwrite
+    if (sheet.getLastRow() > 1) {
+      const response = ui.alert(
+        'Existing Data Detected', 
+        'The sheet "' + SHEET_NAME + '" seems to have data. Initializing might mess up existing headers. Do you want to continue?', 
+        ui.ButtonSet.YES_NO
+      );
+      if (response == ui.Button.NO) return;
+    }
   }
+
+  // Activate the sheet
+  sheet.activate();
 
   // Define the Columns
   // Added "Source" to track if it came from the Admission Modal or Contact Form
@@ -64,13 +77,19 @@ function setupSheet() {
   sheet.setColumnWidth(5, 300); // Message
   sheet.setColumnWidth(6, 120); // Source
   
-  ui.alert('Success!', 'Your sheet has been successfully configured to receive website inquiries.', ui.ButtonSet.OK);
+  ui.alert('Success!', 'Sheet "' + SHEET_NAME + '" has been successfully configured.', ui.ButtonSet.OK);
 }
 
 // 3. HANDLE WEBSITE FORM SUBMISSIONS (POST)
 function doPost(e) {
   try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(SHEET_NAME);
+    
+    if (!sheet) {
+       return ContentService.createTextOutput(JSON.stringify({ 'result': 'error', 'error': 'Sheet not found: ' + SHEET_NAME }))
+      .setMimeType(ContentService.MimeType.JSON);
+    }
     
     // Parse the data sent from the website
     // If e.postData is undefined, we handle it gracefully
@@ -98,5 +117,5 @@ function doPost(e) {
 
 // 4. TEST FUNCTION (GET)
 function doGet(e) {
-  return ContentService.createTextOutput("Smart Step Academy Backend is Online. Use POST requests to submit data.");
+  return ContentService.createTextOutput("Smart Step Academy Backend is Online. Target Sheet: " + SHEET_NAME);
 }
