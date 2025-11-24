@@ -83,8 +83,8 @@ const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
                   <BookOpen size={20} />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">Start Admission</h2>
-                  <p className="text-xs text-muted">Fill details to book a trial class</p>
+                  <h2 className="text-xl font-bold text-white">Book Your Free Trial</h2>
+                  <p className="text-xs text-muted">No fees. No commitment. Just learning.</p>
                 </div>
               </div>
               <button 
@@ -106,8 +106,8 @@ const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
                   >
                     <CheckCircle size={40} />
                   </motion.div>
-                  <h3 className="text-2xl font-bold text-white mb-2">Application Sent!</h3>
-                  <p className="text-muted">We will contact you shortly to schedule your trial class.</p>
+                  <h3 className="text-2xl font-bold text-white mb-2">Request Received!</h3>
+                  <p className="text-muted">We will call you shortly on the provided number.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -152,19 +152,19 @@ const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-1.5">Interested In</label>
+                    <label className="block text-sm font-medium text-gray-400 mb-1.5">What do you need?</label>
                     <select 
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       className="w-full bg-dark/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all appearance-none"
                     >
-                      <option value="" className="bg-card">Select a program...</option>
-                      <option value="Play Group / Nursery" className="bg-card">Play Group / Nursery</option>
-                      <option value="Primary School Tuition" className="bg-card">Primary School Tuition</option>
-                      <option value="Matric Prep" className="bg-card">Matric Prep</option>
+                      <option value="" className="bg-card">Select an option...</option>
+                      <option value="Book Free Trial Class (Recommended)" className="bg-card font-bold text-primary">★ Book Free Trial Class</option>
+                      <option value="Request Fee Structure" className="bg-card">Request Fee Structure</option>
+                      <option value="Play Group / Nursery Admission" className="bg-card">Play Group / Nursery Admission</option>
                       <option value="Online English Course" className="bg-card">Online English Course</option>
-                      <option value="Other" className="bg-card">Other</option>
+                      <option value="Matric Prep Info" className="bg-card">Matric Prep Info</option>
                     </select>
                   </div>
 
@@ -187,14 +187,14 @@ const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
                       </>
                     ) : (
                       <>
-                        Submit Application
+                        Book My Free Slot
                         <Send className="w-5 h-5" />
                       </>
                     )}
                   </button>
                   
                   <p className="text-center text-[10px] text-gray-500 mt-2">
-                    By submitting, you agree to be contacted by Smart Step Academy.
+                    Your information is safe. We will only use it to contact you.
                   </p>
                 </form>
               )}

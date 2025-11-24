@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import StatsBanner from './components/StatsBanner';
 import About from './components/About';
 import Courses from './components/Courses';
 import Specialists from './components/Specialists';
@@ -20,6 +21,7 @@ const App: React.FC = () => {
       <Navbar />
       <main className="relative z-10">
         <Hero />
+        <StatsBanner />
         <About />
         <Courses />
         <Specialists />

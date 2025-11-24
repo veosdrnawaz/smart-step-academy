@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Zap } from 'lucide-react';
 import { Link } from 'react-scroll';
 import { useAdmission } from './AdmissionContext';
 
@@ -60,9 +60,9 @@ const Navbar: React.FC = () => {
               ))}
               <button
                  onClick={openModal}
-                 className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-dark px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 cursor-pointer"
+                 className="bg-gradient-to-r from-primary to-secondary text-dark border-none hover:shadow-[0_0_20px_rgba(0,191,166,0.5)] px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 cursor-pointer flex items-center gap-2 transform hover:-translate-y-0.5"
               >
-                Start Admission Process
+                <Zap size={16} fill="currentColor" /> Book Free Trial
               </button>
             </div>
           </div>
@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden bg-card border-b border-white/5">
+        <div className="md:hidden bg-card border-b border-white/5 shadow-2xl">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link) => (
               <Link
@@ -99,9 +99,9 @@ const Navbar: React.FC = () => {
                    setIsOpen(false);
                    openModal();
                  }}
-                 className="block w-full text-center mt-4 bg-primary text-dark font-bold px-4 py-3 rounded-lg"
+                 className="flex items-center justify-center gap-2 w-full text-center mt-4 bg-primary text-dark font-bold px-4 py-3 rounded-lg shadow-lg"
               >
-                Start Admission Process
+                <Zap size={18} fill="currentColor" /> Book Free Trial Class
               </button>
           </div>
         </div>

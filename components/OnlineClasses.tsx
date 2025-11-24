@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Globe, Clock, Users, ChevronRight } from 'lucide-react';
+import { Globe, Clock, Users, ChevronRight, Zap } from 'lucide-react';
 import { useAdmission } from './AdmissionContext';
 
 const OnlineClasses: React.FC = () => {
@@ -112,9 +112,9 @@ const OnlineClasses: React.FC = () => {
               <div className="mt-8">
                 <button 
                   onClick={openModal}
-                  className="w-full block text-center bg-primary text-dark py-3 rounded-lg font-bold hover:bg-secondary transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 bg-primary text-dark py-3 rounded-lg font-bold hover:bg-secondary transition-colors cursor-pointer"
                 >
-                  Start Admission Process
+                  <Zap size={18} /> Book Free Trial Class
                 </button>
               </div>
             </motion.div>
