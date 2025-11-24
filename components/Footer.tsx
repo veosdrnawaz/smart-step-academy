@@ -3,6 +3,14 @@ import { GraduationCap, Facebook, Instagram, Twitter } from 'lucide-react';
 import { Link } from 'react-scroll';
 
 const Footer: React.FC = () => {
+  const navItems = [
+    { name: 'Home', to: 'home' },
+    { name: 'About', to: 'about' },
+    { name: 'Courses', to: 'courses' },
+    { name: 'Online Classes', to: 'online' },
+    { name: 'Contact', to: 'contact' }
+  ];
+
   return (
     <footer className="bg-card border-t border-white/5 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -24,14 +32,14 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-bold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {['Home', 'About', 'Courses', 'Online Classes', 'Contact'].map((item) => (
-                <li key={item}>
+              {navItems.map((item) => (
+                <li key={item.name}>
                    <Link 
-                    to={item.toLowerCase().split(' ')[0]} 
+                    to={item.to} 
                     smooth={true} 
                     className="text-muted text-sm hover:text-primary cursor-pointer transition-colors"
                    >
-                     {item}
+                     {item.name}
                    </Link>
                 </li>
               ))}
