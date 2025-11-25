@@ -135,34 +135,29 @@ const Navbar: React.FC = () => {
         ref={sidebarRef}
         className={`fixed top-0 right-0 h-auto w-56 bg-card border-l border-b border-white/10 shadow-2xl z-[70] transform transition-transform duration-300 md:hidden flex flex-col rounded-bl-3xl ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        <div className="p-5 pb-2 flex justify-between items-center">
-            {/* Close Button on Left */}
-            <button onClick={() => setIsOpen(false)} className="text-muted hover:text-white">
-                <i className="fa-solid fa-times text-xl"></i>
-            </button>
-            {/* Menu Text on Right */}
-            <span className="font-bold text-lg text-white">Menu</span>
+        {/* Header - Just Title, No Close Button */}
+        <div className="p-4 pb-2 flex justify-end items-center border-b border-white/5">
+            <span className="font-bold text-base text-white">Menu</span>
         </div>
         
-        <div className="flex flex-col py-2 px-2">
+        <div className="flex flex-col p-3 gap-1">
             {navLinks.map((link) => (
               <button
                 key={link.name}
                 onClick={() => handleNavClick(link.to)}
-                className="block w-full text-right px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                className="block w-full text-right px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
               >
                 {link.name}
               </button>
             ))}
-        </div>
 
-        <div className="p-4 pt-2 pb-6">
+             {/* Moved & Resized Button */}
              <button
                  onClick={() => {
                    setIsOpen(false);
                    openModal();
                  }}
-                 className="w-full bg-primary text-dark font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-sm"
+                 className="mt-3 w-full bg-primary text-dark font-bold py-2 rounded-lg shadow-sm flex items-center justify-center gap-2 text-xs hover:bg-secondary transition-colors"
               >
                 <i className="fa-solid fa-bolt"></i> Book Free Trial
               </button>
