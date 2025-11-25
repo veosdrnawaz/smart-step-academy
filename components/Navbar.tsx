@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAdmission } from './AdmissionContext';
 import { ASSETS } from '../config';
@@ -10,6 +10,7 @@ const Navbar: React.FC = () => {
   const { openModal } = useAdmission();
   const location = useLocation();
   const navigate = useNavigate();
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const isHomePage = location.pathname === '/';
 
@@ -18,6 +19,20 @@ const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Handle click outside to close sidebar
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   const navLinks = [
     { name: 'About', to: 'about' },
@@ -110,12 +125,17 @@ const Navbar: React.FC = () => {
         onClick={() => setIsOpen(false)}
       />
       
-      <div className={`fixed top-0 right-0 h-full w-72 bg-card border-l border-white/10 shadow-2xl z-[70] transform transition-transform duration-300 md:hidden flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div 
+        ref={sidebarRef}
+        className={`fixed top-0 right-0 h-full w-64 bg-card border-l border-white/10 shadow-2xl z-[70] transform transition-transform duration-300 md:hidden flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+      >
         <div className="p-6 border-b border-white/5 flex justify-between items-center">
-            <span className="font-bold text-xl text-white">Menu</span>
+            {/* Close Button on Left */}
             <button onClick={() => setIsOpen(false)} className="text-muted hover:text-white">
                 <i className="fa-solid fa-times text-2xl"></i>
             </button>
+            {/* Menu Text on Right */}
+            <span className="font-bold text-xl text-white">Menu</span>
         </div>
         
         <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
@@ -123,7 +143,7 @@ const Navbar: React.FC = () => {
               <button
                 key={link.name}
                 onClick={() => handleNavClick(link.to)}
-                className="block w-full text-left px-4 py-3 rounded-xl text-lg font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                className="block w-full text-right px-4 py-3 rounded-xl text-lg font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
               >
                 {link.name}
               </button>

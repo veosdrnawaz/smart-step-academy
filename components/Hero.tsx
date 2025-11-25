@@ -18,7 +18,7 @@ const Hero: React.FC = () => {
       >
         <div className="absolute inset-0 bg-dark/90 z-10"></div> {/* Dark Overlay */}
         <img 
-            src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1614726365203-c60317e33527?q=80&w=2066&auto=format&fit=crop" 
             alt="Education Background" 
             className="w-full h-full object-cover"
         />
