@@ -80,8 +80,11 @@ const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
             <p className="text-muted text-sm flex items-center gap-1">
               Made in Faisalabad
             </p>
-            <button onClick={onOpenAdmin} className="text-xs text-gray-700 hover:text-primary transition-colors">
-              Admin Login
+            <button 
+                onClick={onOpenAdmin} 
+                className="text-xs bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white px-3 py-1 rounded transition-colors border border-white/5"
+            >
+              <i className="fa-solid fa-lock mr-1"></i> Admin Login
             </button>
           </div>
         </div>

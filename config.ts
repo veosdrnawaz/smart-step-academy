@@ -2,7 +2,7 @@
 // CENTRAL CONFIGURATION FILE
 
 // 1. Google Apps Script URL (Backend)
-export const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB7IEwHlnxn5NWsrgbNoXwPMaBKFcpZTs4D2OeEztRdGlLkJXtLlux8cSUkTSJCbresg/exec";
+export const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxg6edlpkhhW22MuLFHDNHN5BgxrVoXEvOahFJXiW40Jt8JHOl9HcbTvgSIqE-ToHvWuA/exec";
 
 // 2. Image Assets (Logo, Profile Pictures)
 // To change these, simply replace the URL inside the quotes with your own image link.
