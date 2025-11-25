@@ -1,15 +1,30 @@
 
 import React from 'react';
-import { Link } from 'react-scroll';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ASSETS } from '../config';
 
 const Footer: React.FC = () => {
-  const navItems = [
-    { name: 'Home', to: 'home' },
-    { name: 'About', to: 'about' },
-    { name: 'Courses', to: 'courses' },
-    { name: 'Online', to: 'online' },
-    { name: 'Contact', to: 'contact' }
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNavClick = (to: string) => {
+    if (location.pathname === '/') {
+      const element = document.getElementById(to);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(to);
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
+  const programs = [
+    { name: 'Play Group', id: 'play-group' },
+    { name: 'Primary (1-5)', id: 'primary' },
+    { name: 'Matric (Science)', id: 'matric' },
+    { name: 'Spoken English', id: 'spoken-english' }
   ];
 
   const phoneNumber = "923261658636";
@@ -35,15 +50,14 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-bold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {navItems.map((item) => (
-                <li key={item.name}>
-                   <Link 
-                    to={item.to} 
-                    smooth={true} 
-                    className="text-muted text-sm hover:text-primary cursor-pointer transition-colors"
+              {['home', 'about', 'courses', 'online', 'contact'].map((item) => (
+                <li key={item}>
+                   <button 
+                    onClick={() => handleNavClick(item)} 
+                    className="text-muted text-sm hover:text-primary cursor-pointer transition-colors bg-transparent border-none capitalize"
                    >
-                     {item.name}
-                   </Link>
+                     {item}
+                   </button>
                 </li>
               ))}
             </ul>
@@ -52,10 +66,19 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-bold mb-4">Programs</h4>
             <ul className="space-y-2 text-sm text-muted">
-              <li>Play Group</li>
-              <li>Primary (1-5)</li>
-              <li>Matric (Science)</li>
-              <li>Spoken English</li>
+              {programs.map((prog) => (
+                <li key={prog.id}>
+                  <button 
+                    onClick={() => {
+                        navigate(`/program/${prog.id}`);
+                        window.scrollTo(0,0);
+                    }}
+                    className="text-muted hover:text-primary transition-colors text-left bg-transparent border-none p-0 cursor-pointer"
+                  >
+                    {prog.name}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
