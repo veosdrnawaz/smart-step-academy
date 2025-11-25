@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import StatsBanner from './components/StatsBanner';
@@ -14,11 +14,8 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import BackgroundAnimation from './components/BackgroundAnimation';
-import AdminPanel from './components/AdminPanel';
 
 const App: React.FC = () => {
-  const [showAdmin, setShowAdmin] = useState(false);
-
   return (
     <div className="min-h-screen bg-dark text-white font-sans overflow-x-hidden selection:bg-primary selection:text-dark relative">
       <BackgroundAnimation />
@@ -35,10 +32,8 @@ const App: React.FC = () => {
         <Admissions />
         <Contact />
       </main>
-      {/* Pass function to toggle Admin Panel to Footer */}
-      <Footer onOpenAdmin={() => setShowAdmin(true)} />
+      <Footer />
       <WhatsAppButton />
-      <AdminPanel isOpen={showAdmin} onClose={() => setShowAdmin(false)} />
     </div>
   );
 };

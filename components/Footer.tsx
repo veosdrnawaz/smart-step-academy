@@ -3,11 +3,7 @@ import React from 'react';
 import { Link } from 'react-scroll';
 import { ASSETS } from '../config';
 
-interface FooterProps {
-  onOpenAdmin: () => void;
-}
-
-const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
+const Footer: React.FC = () => {
   const navItems = [
     { name: 'Home', to: 'home' },
     { name: 'About', to: 'about' },
@@ -80,12 +76,6 @@ const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
             <p className="text-muted text-sm flex items-center gap-1">
               Made in Faisalabad
             </p>
-            <button 
-                onClick={onOpenAdmin} 
-                className="text-xs bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white px-3 py-1 rounded transition-colors border border-white/5"
-            >
-              <i className="fa-solid fa-lock mr-1"></i> Admin Login
-            </button>
           </div>
         </div>
       </div>

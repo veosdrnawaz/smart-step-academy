@@ -1,7 +1,7 @@
 
 /**
  * =========================================================
- * SMART STEP ACADEMY - BACKEND & ADMIN SYSTEM
+ * SMART STEP ACADEMY - BACKEND
  * =========================================================
  * 
  * INSTRUCTIONS:
@@ -9,7 +9,7 @@
  * 2. Save (Ctrl+S).
  * 3. Click "Deploy" > "New Deployment" > Select "Web App".
  * 4. Configuration:
- *    - Description: "V2 with Validation"
+ *    - Description: "Public Form Backend"
  *    - Execute as: "Me"
  *    - Who has access: "Anyone"
  * 5. Click "Deploy".
@@ -17,7 +17,6 @@
 
 // --- CONFIGURATION ---
 var SHEET_NAME = "Sheet1";
-var ADMIN_PASSWORD = "Nida123"; 
 
 // --- SETUP FUNCTION ---
 function onOpen() {
@@ -84,45 +83,8 @@ function doPost(e) {
         ]);
         response = { status: "success", message: "Data saved" };
       }
-    }
-    
-    // --- ACTION: ADMIN LOGIN ---
-    else if (action === "login") {
-      if (data.password === ADMIN_PASSWORD) {
-        response = { status: "success", message: "Authenticated" };
-      } else {
-        response = { status: "error", message: "Invalid Password" };
-      }
-    }
-    
-    // --- ACTION: GET LEADS (ADMIN) ---
-    else if (action === "get_leads") {
-      if (data.password === ADMIN_PASSWORD) {
-        var rows = sheet.getDataRange().getValues();
-        var headers = rows.shift(); // Remove headers
-        
-        // Convert to array of objects
-        var leads = rows.map(function(row) {
-          // Check if row is empty
-          if(!row[0] && !row[1]) return null;
-
-          return {
-            timestamp: row[0],
-            name: row[1],
-            grade: row[2],
-            phone: row[3],
-            message: row[4],
-            source: row[5],
-            status: row[6]
-          };
-        })
-        .filter(function(item) { return item !== null; }) // Remove nulls
-        .reverse(); // Show newest first
-        
-        response = { status: "success", data: leads };
-      } else {
-        response = { status: "error", message: "Unauthorized" };
-      }
+    } else {
+      response = { status: "error", message: "Invalid action" };
     }
     
     return ContentService.createTextOutput(JSON.stringify(response))
