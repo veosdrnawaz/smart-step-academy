@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GOOGLE_SCRIPT_URL } from '../config';
 
@@ -23,6 +23,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
+  // Reset state when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setIsAuthenticated(false);
+      setPassword('');
+      setStatus('idle');
+    }
+  }, [isOpen]);
+
   // --- STATISTICS CALCULATION ---
   const stats = useMemo(() => {
     if (!leads.length) return { total: 0, today: 0, topGrade: '-' };
@@ -32,8 +41,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     // Count Today's Leads
     const today = new Date().toDateString();
     const todayCount = leads.filter(l => {
-      const d = new Date(l.timestamp);
-      return d.toDateString() === today;
+      try {
+        const d = new Date(l.timestamp);
+        return d.toDateString() === today;
+      } catch (e) { return false; }
     }).length;
 
     // Find Top Grade
@@ -117,20 +128,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+          {/* Backdrop */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm" 
+            className="fixed inset-0 bg-black/90 backdrop-blur-md" 
             onClick={onClose}
           />
           
+          {/* Modal Container */}
           <motion.div 
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            className={`bg-dark border border-white/10 w-full rounded-2xl shadow-2xl overflow-hidden relative z-[101] flex flex-col transition-all duration-500 ${isAuthenticated ? 'max-w-6xl h-[85vh]' : 'max-w-md h-auto'}`}
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+            transition={{ type: "spring", duration: 0.5 }}
+            className={`bg-dark border border-white/10 w-full rounded-2xl shadow-2xl overflow-hidden relative z-[10000] flex flex-col transition-all duration-500 ${isAuthenticated ? 'max-w-6xl h-[85vh]' : 'max-w-md h-auto'}`}
+            onClick={(e) => e.stopPropagation()} // Prevent click from closing modal
           >
             {/* --- VIEW 1: LOGIN POPUP --- */}
             {!isAuthenticated ? (
@@ -162,7 +177,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                     <button 
                       type="submit" 
                       disabled={status === 'loading' || status === 'success'}
-                      className={`w-full font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${status === 'success' ? 'bg-green-500 text-white' : 'bg-primary text-dark hover:bg-secondary'}`}
+                      className={`w-full font-bold py-3.5 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer ${status === 'success' ? 'bg-green-500 text-white' : 'bg-primary text-dark hover:bg-secondary'}`}
                     >
                       {status === 'loading' ? (
                           <><i className="fa-solid fa-circle-notch fa-spin"></i> Verifying...</>
@@ -173,13 +188,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                       )}
                     </button>
                   </form>
-                  <button onClick={onClose} className="mt-6 text-muted hover:text-white text-sm">Cancel</button>
+                  <button onClick={onClose} className="mt-6 text-muted hover:text-white text-sm cursor-pointer">Cancel</button>
                </div>
             ) : (
                 /* --- VIEW 2: DASHBOARD POPUP --- */
                 <>
                     {/* Header */}
-                    <div className="p-4 border-b border-white/10 flex justify-between items-center bg-card">
+                    <div className="p-4 border-b border-white/10 flex justify-between items-center bg-card shrink-0">
                         <div className="flex items-center gap-3">
                             <div className="bg-primary/20 p-2 rounded-lg">
                                 <i className="fa-solid fa-chart-line text-primary"></i>
@@ -190,10 +205,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <button onClick={refreshData} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="Refresh">
+                            <button onClick={refreshData} className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors cursor-pointer" title="Refresh">
                                 <i className={`fa-solid fa-rotate-right ${status === 'loading' ? 'fa-spin' : ''}`}></i>
                             </button>
-                            <button onClick={onClose} className="p-2 text-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors">
+                            <button onClick={onClose} className="p-2 text-muted hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer">
                                 <i className="fa-solid fa-times text-lg"></i>
                             </button>
                         </div>
@@ -242,24 +257,30 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                         <div className="bg-card/50 border border-white/10 rounded-xl overflow-hidden min-h-[300px]">
                              {/* Mobile Card View */}
                              <div className="md:hidden">
-                                {leads.map((lead, idx) => (
-                                    <div key={idx} className="p-4 border-b border-white/5 last:border-0">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <div>
-                                                <h4 className="text-white font-bold">{lead.name}</h4>
-                                                <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">{lead.grade}</span>
+                                {leads.length === 0 ? (
+                                     <div className="p-8 text-center text-muted">No data available yet.</div>
+                                ) : (
+                                    leads.map((lead, idx) => (
+                                        <div key={idx} className="p-4 border-b border-white/5 last:border-0">
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div>
+                                                    <h4 className="text-white font-bold">{lead.name}</h4>
+                                                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">{lead.grade}</span>
+                                                </div>
+                                                <span className="text-xs text-muted">
+                                                    {lead.timestamp ? new Date(lead.timestamp).toLocaleDateString() : 'N/A'}
+                                                </span>
                                             </div>
-                                            <span className="text-xs text-muted">{new Date(lead.timestamp).toLocaleDateString()}</span>
+                                            <p className="text-sm text-muted mb-3 line-clamp-2">"{lead.message}"</p>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs font-mono text-gray-400">{lead.phone}</span>
+                                                <a href={getWhatsAppLink(lead)} target="_blank" rel="noopener noreferrer" className="bg-[#25D366] text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1">
+                                                    <i className="fa-brands fa-whatsapp"></i> Chat
+                                                </a>
+                                            </div>
                                         </div>
-                                        <p className="text-sm text-muted mb-3 line-clamp-2">"{lead.message}"</p>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-xs font-mono text-gray-400">{lead.phone}</span>
-                                            <a href={getWhatsAppLink(lead)} className="bg-[#25D366] text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1">
-                                                <i className="fa-brands fa-whatsapp"></i> Chat
-                                            </a>
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))
+                                )}
                              </div>
 
                              {/* Desktop Table View */}
@@ -279,7 +300,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                                     ) : (
                                         leads.map((lead, idx) => (
                                             <tr key={idx} className="hover:bg-white/5 transition-colors group">
-                                                <td className="p-4 whitespace-nowrap opacity-60">{new Date(lead.timestamp).toLocaleDateString()}</td>
+                                                <td className="p-4 whitespace-nowrap opacity-60">
+                                                    {lead.timestamp ? new Date(lead.timestamp).toLocaleDateString() : 'N/A'}
+                                                </td>
                                                 <td className="p-4 font-semibold text-white">{lead.name}</td>
                                                 <td className="p-4"><span className="bg-white/5 px-2 py-1 rounded text-xs">{lead.grade}</span></td>
                                                 <td className="p-4 font-mono text-primary">{lead.phone}</td>
