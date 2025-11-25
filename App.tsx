@@ -14,6 +14,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import BackgroundAnimation from './components/BackgroundAnimation';
+import ScrollToTop from './components/ScrollToTop';
 
 const App: React.FC = () => {
   return (
@@ -34,6 +35,7 @@ const App: React.FC = () => {
       </main>
       <Footer />
       <WhatsAppButton />
+      <ScrollToTop />
     </div>
   );
 };
