@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { GOOGLE_SCRIPT_URL } from '../config';
 
@@ -22,6 +23,9 @@ const Contact: React.FC = () => {
       // Using 'text/plain' Content-Type avoids CORS preflight checks for simple POST
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
         body: JSON.stringify({ ...formData, action: 'submit', source: 'Contact Form' }),
       });
 
@@ -152,3 +156,4 @@ const Contact: React.FC = () => {
 };
 
 export default Contact;
+    

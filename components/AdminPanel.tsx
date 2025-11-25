@@ -31,6 +31,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
       // 1. Authenticate & Fetch Data
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
         body: JSON.stringify({ action: 'get_leads', password: password }),
       });
       const result = await response.json();
@@ -56,6 +59,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     try {
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
         body: JSON.stringify({ action: 'get_leads', password: password }),
       });
       const result = await response.json();
@@ -225,3 +231,4 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
 };
 
 export default AdminPanel;
+    

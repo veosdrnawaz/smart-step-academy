@@ -28,6 +28,9 @@ const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
         // 'text/plain' prevents CORS preflight issues while allowing body data
         body: JSON.stringify({ ...formData, action: 'submit', source: 'Admission Popup' }),
       });
@@ -144,3 +147,4 @@ const AdmissionModal: React.FC<AdmissionModalProps> = ({ isOpen, onClose }) => {
 };
 
 export default AdmissionModal;
+    
