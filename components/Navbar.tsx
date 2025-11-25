@@ -128,16 +128,16 @@ const Navbar: React.FC = () => {
       {/* 
          Mobile Menu Container
          - h-auto: Height fits content
-         - w-48: Compact width (smaller than w-64)
-         - rounded-bl-2xl: Rounded corner styling
+         - w-48: Compact width
+         - rounded-bl-3xl: Smooth styling
       */}
       <div 
         ref={sidebarRef}
-        className={`fixed top-0 right-0 h-auto w-48 bg-card border-l border-b border-white/10 shadow-2xl z-[70] transform transition-transform duration-300 md:hidden flex flex-col rounded-bl-2xl ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-auto w-48 bg-card border-l border-b border-white/10 shadow-2xl z-[70] transform transition-transform duration-300 md:hidden flex flex-col rounded-bl-3xl ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        {/* Header - Just Title, No Close Button */}
-        <div className="p-3 border-b border-white/5 flex justify-between items-center">
-            <span className="font-bold text-sm text-primary pl-1">Menu</span>
+        {/* Header */}
+        <div className="p-3 border-b border-white/5">
+            <span className="font-bold text-sm text-primary pl-2">Menu</span>
         </div>
         
         <div className="flex flex-col p-2 gap-1">
@@ -151,15 +151,15 @@ const Navbar: React.FC = () => {
               </button>
             ))}
 
-             {/* Moved & Resized Button */}
+             {/* Small, Left-Aligned CTA Button */}
              <button
                  onClick={() => {
                    setIsOpen(false);
                    openModal();
                  }}
-                 className="mt-2 w-full bg-primary text-dark font-bold py-2 rounded-lg shadow-sm flex items-center justify-center gap-2 text-xs hover:bg-secondary transition-colors"
+                 className="mt-2 w-full bg-primary text-dark font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-start gap-2 text-[11px] hover:bg-secondary transition-colors"
               >
-                <i className="fa-solid fa-bolt"></i> Book Free Trial
+                <i className="fa-solid fa-bolt text-xs"></i> Book Free Trial
               </button>
         </div>
       </div>
