@@ -119,44 +119,50 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Drawer (Right Side) */}
+      {/* Mobile Drawer Overlay */}
       <div 
         className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setIsOpen(false)}
       />
       
+      {/* 
+         Mobile Menu Container
+         - h-auto: Height fits content
+         - w-56: Compact width
+         - rounded-bl-3xl: Rounded corner styling
+      */}
       <div 
         ref={sidebarRef}
-        className={`fixed top-0 right-0 h-full w-64 bg-card border-l border-white/10 shadow-2xl z-[70] transform transition-transform duration-300 md:hidden flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed top-0 right-0 h-auto w-56 bg-card border-l border-b border-white/10 shadow-2xl z-[70] transform transition-transform duration-300 md:hidden flex flex-col rounded-bl-3xl ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        <div className="p-6 border-b border-white/5 flex justify-between items-center">
+        <div className="p-5 pb-2 flex justify-between items-center">
             {/* Close Button on Left */}
             <button onClick={() => setIsOpen(false)} className="text-muted hover:text-white">
-                <i className="fa-solid fa-times text-2xl"></i>
+                <i className="fa-solid fa-times text-xl"></i>
             </button>
             {/* Menu Text on Right */}
-            <span className="font-bold text-xl text-white">Menu</span>
+            <span className="font-bold text-lg text-white">Menu</span>
         </div>
         
-        <div className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+        <div className="flex flex-col py-2 px-2">
             {navLinks.map((link) => (
               <button
                 key={link.name}
                 onClick={() => handleNavClick(link.to)}
-                className="block w-full text-right px-4 py-3 rounded-xl text-lg font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                className="block w-full text-right px-4 py-2.5 rounded-lg text-base font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
               >
                 {link.name}
               </button>
             ))}
         </div>
 
-        <div className="p-6 border-t border-white/5 bg-dark/50">
+        <div className="p-4 pt-2 pb-6">
              <button
                  onClick={() => {
                    setIsOpen(false);
                    openModal();
                  }}
-                 className="w-full bg-primary text-dark font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2"
+                 className="w-full bg-primary text-dark font-bold py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-sm"
               >
                 <i className="fa-solid fa-bolt"></i> Book Free Trial
               </button>
