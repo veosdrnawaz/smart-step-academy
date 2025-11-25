@@ -42,12 +42,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
         setLeads(cleanLeads);
         setStatus('idle');
       } else {
-        alert('Invalid Password');
+        // Show error in UI instead of alert for better mobile UX
         setStatus('error');
       }
     } catch (error) {
       console.error(error);
-      alert('Connection Failed');
       setStatus('error');
     }
   };
@@ -90,112 +89,137 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(text)}`;
   };
 
-  if (!isOpen) return null;
-
+  // FIX: Do not return null early. Let AnimatePresence handle the conditional rendering.
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
-        
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-dark border border-white/10 w-full max-w-6xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden relative z-[101] flex flex-col"
-        >
-          {/* Header */}
-          <div className="p-4 border-b border-white/10 flex justify-between items-center bg-card">
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <i className="fa-solid fa-lock text-primary"></i> Admin Panel
-            </h2>
-            <button onClick={onClose} className="text-muted hover:text-white">
-              <i className="fa-solid fa-times text-xl"></i>
-            </button>
-          </div>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm" 
+            onClick={onClose}
+          />
+          
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            className="bg-dark border border-white/10 w-full max-w-6xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden relative z-[101] flex flex-col"
+          >
+            {/* Header */}
+            <div className="p-4 border-b border-white/10 flex justify-between items-center bg-card">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <i className="fa-solid fa-lock text-primary"></i> Admin Panel
+              </h2>
+              <button onClick={onClose} className="text-muted hover:text-white p-2">
+                <i className="fa-solid fa-times text-xl"></i>
+              </button>
+            </div>
 
-          {/* Body */}
-          <div className="flex-1 overflow-auto p-6">
-            {!isAuthenticated ? (
-              <div className="flex flex-col items-center justify-center h-full">
-                <form onSubmit={handleLogin} className="w-full max-w-sm space-y-4">
-                  <div className="text-center mb-6">
-                    <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-gray-400">
-                      <i className="fa-solid fa-user-shield"></i>
+            {/* Body */}
+            <div className="flex-1 overflow-auto p-6 bg-dark">
+              {!isAuthenticated ? (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <form onSubmit={handleLogin} className="w-full max-w-sm space-y-4">
+                    <div className="text-center mb-6">
+                      <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl text-gray-400">
+                        <i className="fa-solid fa-user-shield"></i>
+                      </div>
+                      <h3 className="text-white font-bold text-xl">Admin Login</h3>
                     </div>
-                    <h3 className="text-white font-bold text-xl">Admin Login</h3>
-                  </div>
-                  <input 
-                    type="password" 
-                    placeholder="Enter Password" 
-                    className="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary outline-none"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <button 
-                    type="submit" 
-                    disabled={status === 'loading'}
-                    className="w-full bg-primary text-dark font-bold py-3 rounded-lg hover:bg-secondary transition-colors"
-                  >
-                    {status === 'loading' ? 'Verifying...' : 'Login'}
-                  </button>
-                </form>
-              </div>
-            ) : (
-              <div className="h-full flex flex-col">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-white font-bold">Recent Leads ({leads.length})</h3>
-                  <button onClick={refreshData} className="text-primary hover:text-white text-sm">
-                    <i className={`fa-solid fa-rotate-right ${status === 'loading' ? 'fa-spin' : ''} mr-1`}></i> Refresh Data
-                  </button>
-                </div>
-                
-                <div className="overflow-auto border border-white/10 rounded-lg">
-                  <table className="w-full text-left text-sm text-gray-300">
-                    <thead className="bg-white/5 text-white uppercase text-xs font-bold">
-                      <tr>
-                        <th className="p-4">Date</th>
-                        <th className="p-4">Name</th>
-                        <th className="p-4">Grade</th>
-                        <th className="p-4">Phone</th>
-                        <th className="p-4">Message</th>
-                        <th className="p-4">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {leads.length === 0 ? (
-                         <tr>
-                             <td colSpan={6} className="p-8 text-center text-muted">No valid leads found yet.</td>
-                         </tr>
-                      ) : (
-                        leads.map((lead, idx) => (
-                            <tr key={idx} className="hover:bg-white/5 transition-colors">
-                              <td className="p-4 whitespace-nowrap opacity-60">
-                                {new Date(lead.timestamp).toLocaleDateString()}
-                              </td>
-                              <td className="p-4 font-semibold text-white">{lead.name}</td>
-                              <td className="p-4">{lead.grade}</td>
-                              <td className="p-4 font-mono text-primary">{lead.phone}</td>
-                              <td className="p-4 max-w-xs truncate" title={lead.message}>{lead.message || '-'}</td>
-                              <td className="p-4">
-                                <a 
-                                    href={getWhatsAppLink(lead)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb855] text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-lg hover:shadow-green-500/20"
-                                >
-                                    <i className="fa-brands fa-whatsapp text-sm"></i> Chat
-                                </a>
-                              </td>
-                            </tr>
-                          ))
+                    
+                    <div className="space-y-2">
+                      <input 
+                        type="password" 
+                        placeholder="Enter Password" 
+                        className="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-primary outline-none transition-colors"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      {status === 'error' && (
+                        <p className="text-red-500 text-sm text-center">Invalid Password or Connection Error</p>
                       )}
-                    </tbody>
-                  </table>
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      disabled={status === 'loading'}
+                      className="w-full bg-primary text-dark font-bold py-3 rounded-lg hover:bg-secondary transition-colors"
+                    >
+                      {status === 'loading' ? 'Verifying...' : 'Login'}
+                    </button>
+                  </form>
                 </div>
-              </div>
-            )}
-          </div>
-        </motion.div>
-      </div>
+              ) : (
+                <div className="h-full flex flex-col">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                    <h3 className="text-white font-bold">Recent Leads ({leads.length})</h3>
+                    <div className="flex gap-3">
+                        <a 
+                            href="https://docs.google.com/spreadsheets/u/0/" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg text-sm transition-colors border border-white/10"
+                        >
+                            <i className="fa-solid fa-table mr-2"></i> Open Database
+                        </a>
+                        <button onClick={refreshData} className="text-primary hover:text-white text-sm bg-primary/10 px-4 py-2 rounded-lg border border-primary/20">
+                            <i className={`fa-solid fa-rotate-right ${status === 'loading' ? 'fa-spin' : ''} mr-1`}></i> Refresh
+                        </button>
+                    </div>
+                  </div>
+                  
+                  <div className="overflow-x-auto border border-white/10 rounded-lg bg-card/50">
+                    <table className="w-full text-left text-sm text-gray-300 min-w-[800px]">
+                      <thead className="bg-white/5 text-white uppercase text-xs font-bold">
+                        <tr>
+                          <th className="p-4">Date</th>
+                          <th className="p-4">Name</th>
+                          <th className="p-4">Grade</th>
+                          <th className="p-4">Phone</th>
+                          <th className="p-4">Message</th>
+                          <th className="p-4">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/5">
+                        {leads.length === 0 ? (
+                           <tr>
+                               <td colSpan={6} className="p-8 text-center text-muted">No valid leads found yet.</td>
+                           </tr>
+                        ) : (
+                          leads.map((lead, idx) => (
+                              <tr key={idx} className="hover:bg-white/5 transition-colors">
+                                <td className="p-4 whitespace-nowrap opacity-60">
+                                  {new Date(lead.timestamp).toLocaleDateString()}
+                                </td>
+                                <td className="p-4 font-semibold text-white">{lead.name}</td>
+                                <td className="p-4">{lead.grade}</td>
+                                <td className="p-4 font-mono text-primary">{lead.phone}</td>
+                                <td className="p-4 max-w-xs truncate" title={lead.message}>{lead.message || '-'}</td>
+                                <td className="p-4">
+                                  <a 
+                                      href={getWhatsAppLink(lead)}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb855] text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-lg hover:shadow-green-500/20"
+                                  >
+                                      <i className="fa-brands fa-whatsapp text-sm"></i> Chat
+                                  </a>
+                                </td>
+                              </tr>
+                            ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+      )}
     </AnimatePresence>
   );
 };

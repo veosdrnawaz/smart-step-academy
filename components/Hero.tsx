@@ -1,15 +1,32 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useAdmission } from './AdmissionContext';
 
 const Hero: React.FC = () => {
   const { openModal } = useAdmission();
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 1000], [0, 400]); // Moves background slower than content
 
   return (
-    <section className="relative pt-28 pb-16 lg:pt-48 lg:pb-32 overflow-hidden" id="home">
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] -z-10" />
-      <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-[96px] -z-10" />
+    <section className="relative pt-28 pb-16 lg:pt-48 lg:pb-32 overflow-hidden h-full min-h-screen flex items-center" id="home">
+      
+      {/* Parallax Background Image */}
+      <motion.div 
+        style={{ y }}
+        className="absolute inset-0 z-0"
+      >
+        <div className="absolute inset-0 bg-dark/90 z-10"></div> {/* Dark Overlay */}
+        <img 
+            src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop" 
+            alt="Education Background" 
+            className="w-full h-full object-cover"
+        />
+      </motion.div>
+
+      {/* Decorative Blobs */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[128px] z-0 pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-secondary/10 rounded-full blur-[96px] z-0 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-4xl mx-auto">
