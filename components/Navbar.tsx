@@ -99,7 +99,7 @@ const Navbar: React.FC = () => {
                 ))}
                 <button
                    onClick={openModal}
-                   className="bg-gradient-to-r from-primary to-secondary text-dark border-none px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-primary/20"
+                   className="cursor-pointer bg-gradient-to-r from-primary to-secondary text-dark border-none px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-primary/20"
                 >
                   <i className="fa-solid fa-bolt mr-2"></i> Book Free Trial
                 </button>
@@ -127,17 +127,17 @@ const Navbar: React.FC = () => {
       
       {/* 
          Mobile Menu Container
-         - h-auto: Height fits content
-         - w-48: Compact width
+         - h-auto: Height fits content tightly (no full screen)
+         - w-48: Compact width (approx 192px)
          - rounded-bl-3xl: Smooth styling
       */}
       <div 
         ref={sidebarRef}
         className={`fixed top-0 right-0 h-auto w-48 bg-card border-l border-b border-white/10 shadow-2xl z-[70] transform transition-transform duration-300 md:hidden flex flex-col rounded-bl-3xl ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        {/* Header */}
-        <div className="p-3 border-b border-white/5">
-            <span className="font-bold text-sm text-primary pl-2">Menu</span>
+        {/* Header - No Cross Button, just Title */}
+        <div className="p-4 border-b border-white/5 flex justify-between items-center">
+            <span className="font-bold text-sm text-primary">Menu</span>
         </div>
         
         <div className="flex flex-col p-2 gap-1">
@@ -157,9 +157,9 @@ const Navbar: React.FC = () => {
                    setIsOpen(false);
                    openModal();
                  }}
-                 className="mt-2 w-full bg-primary text-dark font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-start gap-2 text-[11px] hover:bg-secondary transition-colors"
+                 className="mt-2 w-full bg-primary text-dark font-bold py-2 px-3 rounded-lg shadow-sm flex items-center justify-start gap-2 text-[11px] hover:bg-secondary transition-colors cursor-pointer"
               >
-                <i className="fa-solid fa-bolt text-xs"></i> Book Free Trial
+                <i className="fa-solid fa-bolt text-[10px]"></i> Book Free Trial
               </button>
         </div>
       </div>
